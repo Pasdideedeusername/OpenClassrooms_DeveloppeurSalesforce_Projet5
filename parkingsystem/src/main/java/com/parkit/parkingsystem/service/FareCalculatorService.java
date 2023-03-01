@@ -1,4 +1,4 @@
-cdpackage com.parkit.parkingsystem.service;
+package com.parkit.parkingsystem.service;
 
 import com.parkit.parkingsystem.constants.Fare;
 import com.parkit.parkingsystem.model.Ticket;
@@ -51,7 +51,7 @@ public class FareCalculatorService {
             ticket.setPrice(ticket.getPrice() * 0.95);
         }
     }  
-      // rajouté par Carine à l'étape 4. ICI JE GENERE UNE ERREUR
+      // rajouté par Carine à l'étape 4. 
     public void calculateFare(Ticket ticket){
         this.calculateFare(ticket, false);
     }
