@@ -63,39 +63,39 @@ public class FareCalculatorServiceTest {
         assertEquals(ticket.getPrice(), Fare.BIKE_RATE_PER_HOUR);
     }
 
-//    @Test // retiré des tests car expressions lambda non supportées
-//    public void calculateFareUnkownType(){
-//        long currentTime = System.currentTimeMillis(); // nouveau: pour figer le temps dans une variable et ainsi éviter tout écart de qq ms entre outTime et inTime pour le test
-//        Date inTime = new Date(currentTime-(60*60*1000)); // On retire une heure
-//        Date outTime = new Date(currentTime) ;
-//        
-//        //Date inTime = new Date();
-//        //inTime.setTime( System.currentTimeMillis() - (  60 * 60 * 1000) );
-//        //Date outTime = new Date();
-//        ParkingSpot parkingSpot = new ParkingSpot(1, null,false);
-//
-//        ticket.setInTime(inTime);
-//        ticket.setOutTime(outTime);
-//        ticket.setParkingSpot(parkingSpot);
-//        assertThrows(NullPointerException.class, () -> fareCalculatorService.calculateFare(ticket));
-//    }
+    @Test 
+    public void calculateFareUnkownType(){
+        long currentTime = System.currentTimeMillis(); // nouveau: pour figer le temps dans une variable et ainsi éviter tout écart de qq ms entre outTime et inTime pour le test
+        Date inTime = new Date(currentTime-(60*60*1000)); // On retire une heure
+        Date outTime = new Date(currentTime) ;
+        
+        //Date inTime = new Date();
+        //inTime.setTime( System.currentTimeMillis() - (  60 * 60 * 1000) );
+        //Date outTime = new Date();
+        ParkingSpot parkingSpot = new ParkingSpot(1, null,false);
 
-//    @Test // retiré des tests car expressions lambda non supportées
-//    public void calculateFareBikeWithFutureInTime(){
-//        long currentTime = System.currentTimeMillis(); // nouveau: pour figer le temps dans une variable et ainsi éviter tout écart de qq ms entre outTime et inTime pour le test
-//        Date inTime = new Date(currentTime+(60*60*1000)); // On rajoute une heure
-//        Date outTime = new Date(currentTime) ;
-//        
-//        //Date inTime = new Date();
-//        //inTime.setTime( System.currentTimeMillis() + (  60 * 60 * 1000) );
-//        //Date outTime = new Date();
-//        ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.BIKE,false);
+        ticket.setInTime(inTime);
+        ticket.setOutTime(outTime);
+        ticket.setParkingSpot(parkingSpot);
+        assertThrows(NullPointerException.class, () -> fareCalculatorService.calculateFare(ticket));
+    }
 
-//        ticket.setInTime(inTime);
-//        ticket.setOutTime(outTime);
-//        ticket.setParkingSpot(parkingSpot);
-//        assertThrows(IllegalArgumentException.class, () -> fareCalculatorService.calculateFare(ticket));
-//    }
+    @Test 
+    public void calculateFareBikeWithFutureInTime(){
+        long currentTime = System.currentTimeMillis(); // nouveau: pour figer le temps dans une variable et ainsi éviter tout écart de qq ms entre outTime et inTime pour le test
+        Date inTime = new Date(currentTime+(60*60*1000)); // On rajoute une heure
+        Date outTime = new Date(currentTime) ;
+        
+        //Date inTime = new Date();
+        //inTime.setTime( System.currentTimeMillis() + (  60 * 60 * 1000) );
+        //Date outTime = new Date();
+        ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.BIKE,false);
+
+        ticket.setInTime(inTime);
+        ticket.setOutTime(outTime);
+        ticket.setParkingSpot(parkingSpot);
+        assertThrows(IllegalArgumentException.class, () -> fareCalculatorService.calculateFare(ticket));
+    }
 
     @Test
     public void calculateFareBikeWithLessThanOneHourParkingTime(){
