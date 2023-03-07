@@ -21,11 +21,7 @@ public class FareCalculatorService {
         //TODO: Some tests are failing here. Need to check if this logic is correct
         double duration = ((outHour - inHour)/(60*60*1000)); // int changé pour double et revient en heure
         
-        System.out.println("duration "+ duration); //pour debugger, à retirer par la suite
-        System.out.println("Inhour" +inHour);//pour debugger, à retirer par la suite
-        System.out.print("outHour" + outHour);//pour debugger, à retirer par la suite
         
-
         //implementation du 30 min gratuites, Etape 3:
         if (duration <= 0.5) { 
             duration = 0;
