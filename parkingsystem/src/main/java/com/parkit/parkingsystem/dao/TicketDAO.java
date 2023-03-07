@@ -86,4 +86,29 @@ public class TicketDAO {
         }
         return false;
     }
+
+    //méthode rajoutée par Carine étape 4: pour compter combien de tickets sont enregistrés pour une véhicule.
+    //queston Carine ligne 97: utiliser vehicle_reg_number ou VEHICLE_REG_NUMBER ? Est-ce que ticket est bien la BD dans laquelle prendre l'info ?
+    public int getNbTicket(String vehicleId){
+        Connection con = null;
+        int nbTickets = 0;
+        try {
+            con = dataBaseConfig.getConnection();
+            PreparedStatement ps = con.prepareStatement("SELECT COUNT(*) FROM ticket WHERE vehicle_reg_number = ?");
+            ps.setString(1, vehicleId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                nbTickets = rs.getInt(1);
+            }
+            dataBaseConfig.closeResultSet(rs);
+            dataBaseConfig.closePreparedStatement(ps);
+        } 
+        catch (Exception ex) {
+            logger.error("Error fetching ticket count", ex);
+        } finally {
+            dataBaseConfig.closeConnection(con);
+            return nbTickets;
+        }
+    }
+
 }
