@@ -14,6 +14,15 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import static org.mockito.Mockito.when;
+import java.util.Date;
+import static org.junit.jupiter.api.Assertions.*;
+import com.parkit.parkingsystem.model.ParkingSpot;
+import com.parkit.parkingsystem.model.Ticket;
+import com.parkit.parkingsystem.constants.Fare;
+import com.parkit.parkingsystem.constants.ParkingType;
+import java.io.*;
+import java.lang.Thread;
+
 
 @ExtendWith(MockitoExtension.class)
 public class ParkingDataBaseIT {
@@ -52,6 +61,10 @@ public class ParkingDataBaseIT {
         ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
         parkingService.processIncomingVehicle();
         //TODO: check that a ticket is actualy saved in DB and Parking table is updated with availability
+        Ticket ticket = ticketDAO.getTicket("ABCDEF");
+        assertNotNull(ticket);
+        assertEquals(false, ticket.getParkingSpot().isAvailable());
+     
     }
 
     @Test
@@ -60,6 +73,37 @@ public class ParkingDataBaseIT {
         ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
         parkingService.processExitingVehicle();
         //TODO: check that the fare generated and out time are populated correctly in the database
+        Ticket ticket = ticketDAO.getTicket("ABCDEF");
+        assertNotNull(ticket.getPrice());
+        assertNotNull(ticket.getOutTime());
+    } 
+
+    @Test //Ajout Carine 
+    public void testParkingLotExitRecurringUser() throws Exception{
+        ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
+
+        // crée un ticket avec une entrée pour devenir un utilisateur récurrent
+        Ticket ticket = new Ticket();
+    
+        ticket.setVehicleRegNumber("ABCDEF");
+        ticket.setPrice(45);
+        ticket.setInTime(new Date(System.currentTimeMillis() - (24 * 60 * 60 * 1000))); // entrée il y a 10 heures
+        ticket.setOutTime(new Date(System.currentTimeMillis() - (22 * 60 * 60 * 1000))); // sortie il y a 9 heures
+        ticketDAO.saveTicket(ticket);
+        Thread.sleep(1000);
+        parkingService.processIncomingVehicle();
+        Thread.sleep(1000);
+
+        Ticket ticketUpdatedDouzefois = ticketDAO.getTicket("ABCDEF");
+        ticketUpdatedDouzefois.setInTime(new Date(System.currentTimeMillis() - (60 * 60 * 1000)));
+        ticketDAO.saveTicket(ticketUpdatedDouzefois);
+        Thread.sleep(1000);
+
+        parkingService.processExitingVehicle();
+        Thread.sleep(1000);
+
+        Ticket updatedTicketTrezzzz = ticketDAO.getTicket("ABCDEF");
+        assertTrue(Math.abs((0.95 * Fare.CAR_RATE_PER_HOUR) - updatedTicketTrezzzz.getPrice()) <= 0.01);
     }
 
 }
