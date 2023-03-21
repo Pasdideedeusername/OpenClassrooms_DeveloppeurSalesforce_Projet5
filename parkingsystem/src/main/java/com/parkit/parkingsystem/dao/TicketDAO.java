@@ -88,7 +88,6 @@ public class TicketDAO {
     }
 
     //méthode rajoutée par Carine étape 4: pour compter combien de tickets sont enregistrés pour une véhicule.
-    //queston Carine ligne 97: utiliser vehicle_reg_number ou VEHICLE_REG_NUMBER ? Est-ce que ticket est bien la BD dans laquelle prendre l'info ?
     public int getNbTicket(String vehicleId){
         Connection con = null;
         int nbTickets = 0;
